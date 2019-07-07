@@ -34,10 +34,11 @@ func Init() *gorm.DB {
 	pass := os.Getenv("DB_PASSWORD")
 	connect := user + ":" + pass + "@" + protocol + "/" + dbName
 
-	db, err := gorm.Open(dbMs, connect)
+	db, err = gorm.Open(dbMs, connect)
 	if err != nil {
 		// TODO: エラー処理 panic使わない
 		panic(err.Error())
+		// panic(err.Error())
 	}
 
 	autoMigration()
