@@ -3,11 +3,11 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/TechLoCo/Zousan-api/controllers"
+	"github.com/TechLoCo/Zousan-api/controller"
 )
 
-// Init actions initialize router
-func Init() {
+// Run actions initialize router
+func Run() {
 	r := route()
 	r.Run()
 }
@@ -17,8 +17,7 @@ func route() *gin.Engine {
 
 	u := r.Group("users")
 	{
-		// HACK: controller controllerしててなんかヤダ
-		ctrl := controller.UserController{}
+		ctrl := controller.User{}
 		u.GET("", ctrl.Index)
 		u.POST("", ctrl.Create)
 	}

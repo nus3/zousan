@@ -17,24 +17,38 @@ var (
 	err error
 )
 
+// MySQLConfig is config.
+type MySQLConfig struct {
+	User     string
+	Password string
+	Host     string
+	Port     string
+	Database string
+}
+
+func (c *MySQLConfig) toString() string {
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", c.User, c.Password, c.Host, c.Port, c.Database)
+}
+
 // Init actions initialize db
 func Init() *gorm.DB {
-	// TODO: 環境変数によってenvファイルを変更する
+	// TODO: 環境ごとに読み込むenvファイルを変更する
 	err := godotenv.Load(fmt.Sprintf("env/local.env"))
 	if err != nil {
 		panic(err.Error())
 	}
 
+	// HACK: MySQLConfigつってんのにdbMsを指定するのはおかしいので直したいが頭が働かないので元気な時になおす
 	dbMs := os.Getenv("DB_CONNECTION")
-	host := os.Getenv("DB_HOST")
-	port := os.Getenv("DB_PORT")
-	protocol := "tcp(" + host + ":" + port + ")"
-	dbName := os.Getenv("DB_DATABASE")
-	user := os.Getenv("DB_USERNAME")
-	pass := os.Getenv("DB_PASSWORD")
-	connect := user + ":" + pass + "@" + protocol + "/" + dbName
+	mysqlConfig := &MySQLConfig{
+		Host:     os.Getenv("DB_HOST"),
+		Port:     os.Getenv("DB_PORT"),
+		User:     os.Getenv("DB_USERNAME"),
+		Password: os.Getenv("DB_PASSWORD"),
+		Database: os.Getenv("DB_DATABASE"),
+	}
 
-	db, err = gorm.Open(dbMs, connect)
+	db, err = gorm.Open(dbMs, mysqlConfig.toString())
 	if err != nil {
 		// TODO: エラー処理 panic使わない
 		panic(err.Error())

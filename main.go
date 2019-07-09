@@ -9,5 +9,5 @@ func main() {
 	db.Init()
 	defer db.Close()
 
-	router.Init()
+	router.Run()
 }

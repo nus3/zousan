@@ -3,14 +3,14 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/TechLoCo/Zousan-api/services"
+	user "github.com/TechLoCo/Zousan-api/service"
 )
 
-// UserController is user controller
-type UserController struct{}
+// User is user controller
+type User struct{}
 
 // Index action: GET /users
-func (u UserController) Index(c *gin.Context) {
+func (u User) Index(c *gin.Context) {
 	var s user.Service
 	p, err := s.GetAll()
 
@@ -22,7 +22,7 @@ func (u UserController) Index(c *gin.Context) {
 }
 
 // Create action: POST /users
-func (u UserController) Create(c *gin.Context) {
+func (u User) Create(c *gin.Context) {
 	var s user.Service
 	p, err := s.CreateModel(c)
 
